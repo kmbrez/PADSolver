@@ -12,8 +12,10 @@ def create_empty_board():
 
 
 def print_board(Board):
-	for row in Board:
-		print(row)
+    for row in Board:
+        for orb in row:
+            print(orb, end="")
+        print("")
 
 
 def make_rc(row, col):
@@ -71,6 +73,6 @@ def find_matches(Board):
 
 
 print_board(Board)
-print(max_combos(Board), sum(max_combos(Board)))
+print(max_combos(Board), sum(max_combos(Board)), "combos possible")
 for row in find_matches(Board):
     print(row)

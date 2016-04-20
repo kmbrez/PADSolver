@@ -1,29 +1,33 @@
-﻿import random
+﻿"""Optimizer for PAD boards"""
+import random
 
 
 ROWS = 5
 COLS = 6
 TYPES = 6
 COLORS = ["R", "B", "G", "Y", "P", "H"]
-Board = [[random.choice(COLORS) for x in range(COLS)] for x in range(ROWS)]  # Randomizing the board
+BOARD = [[random.choice(COLORS) for x in range(COLS)] for x in range(ROWS)]  # Randomizing the board
+
 
 def create_empty_board():
-	return [[0 for x in range(COLS)] for x in range(ROWS)]
+    """Create an empty 5x6 board."""
+    return [[0 for x in range(COLS)] for x in range(ROWS)]
 
 
 def print_board(Board):
+    """Function to visually print a 5x6 boaard."""
     for row in Board:
         for orb in row:
             print(orb, end="")
         print("")
 
 
-def make_rc(row, col):
-	return {"row": row, "col": col}
+#def make_rc(row, col):
+#	return {"row": row, "col": col}
 
 
-def make_match(typing, count, isRow):
-	return {"type": typing, "count": count, "isRow": isRow}
+#def make_match(typing, count, isRow):
+#	return {"type": typing, "count": count, "isRow": isRow}
 
 
 def max_combos(Board):
@@ -38,7 +42,6 @@ def max_combos(Board):
     p_max = int(big_board.count("P") / 3)
     h_max = int(big_board.count("H") / 3)
     big_board = [r_max, b_max, g_max, y_max, p_max, h_max]
-
     return big_board
 
 
@@ -70,11 +73,11 @@ def find_matches(Board):
                 match_board[i-2][j] = cur_orb
             prev_1_orb = prev_2_orb
             prev_2_orb = cur_orb
-        return match_board
+    return match_board
 
 
 
-print_board(Board)
-print(max_combos(Board))
-print(sum(max_combos(Board)), "combos possible")
-print_board(find_matches(Board))
+print_board(BOARD)
+print(max_combos(BOARD))
+print(sum(max_combos(BOARD)), "combos possible")
+print_board(find_matches(BOARD))

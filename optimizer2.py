@@ -63,34 +63,58 @@ def find_matches(board):
     match_board = create_empty_board()
     #find horizontal matches first
     for i in range(0, ROWS):
-        prev_1_orb = "X"
         prev_2_orb = "X"
+        prev_1_orb = "X"
         for j in range(0, COLS):
             cur_orb = board[i][j]
-            if prev_1_orb == prev_2_orb and prev_2_orb == cur_orb and cur_orb != "X":
+            if prev_2_orb == prev_1_orb and prev_1_orb == cur_orb and (cur_orb != "X" or cur_orb != 0):
                 match_board[i][j] = cur_orb
                 match_board[i][j-1] = cur_orb
                 match_board[i][j-2] = cur_orb
-            prev_1_orb = prev_2_orb
-            prev_2_orb = cur_orb
+                board[i][j] = 0
+                board[i][j-1] = 0
+                board[i][j-2] = 0
+            prev_2_orb = prev_1_orb
+            prev_1_orb = cur_orb
 
 	#find vertical matches
     for j in range(0, COLS):
-        prev_1_orb = "X"
         prev_2_orb = "X"
+        prev_1_orb = "X"
         for i in range(0, ROWS):
             cur_orb = board[i][j]
-            if prev_1_orb == prev_2_orb and prev_2_orb == cur_orb and cur_orb != "X":
+            if prev_2_orb == prev_1_orb and prev_1_orb == cur_orb and (cur_orb != "X" or cur_orb != 0):
                 match_board[i][j] = cur_orb
                 match_board[i-1][j] = cur_orb
                 match_board[i-2][j] = cur_orb
-            prev_1_orb = prev_2_orb
-            prev_2_orb = cur_orb
-    return match_board
+                board[i][j] = 0
+                board[i-1][j] = 0
+                board[i-2][j] = 0
+            prev_2_orb = prev_1_orb
+            prev_1_orb = cur_orb
+
+    #count number of matched orbs in every column
+    matched_orbs = 0
+    for x in range(0, COLS):
+        for y in range(0, ROWS):
+            if board[y][x] == 0:
+                matched_orbs += 1
+    print(matched_orbs, "orbs matched")
+    print_board(board)
+    if matched_orbs > 0:
+        find_matches(drop_orbs(board))
+    else:
+        return match_board
+
+
+def drop_orbs(board):
+    """Takes a board with existing matches and drops
+    the board accordingly.
+    """
 
 
 
 print_board(BOARD)
 print(max_combos(BOARD))
 print(sum(max_combos(BOARD)), "combos possible")
-print_board(find_matches(BOARD))
+find_matches(BOARD)

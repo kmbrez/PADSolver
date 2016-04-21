@@ -60,20 +60,18 @@ def find_matches(board):
     """Using an existing board, this finds all orbs that currently count as a match.
     Returns a board that only shows matched orbs.
     """
-    match_board = create_empty_board()
     #find horizontal matches first
     for i in range(0, ROWS):
         prev_2_orb = "X"
         prev_1_orb = "X"
         for j in range(0, COLS):
             cur_orb = board[i][j]
-            if prev_2_orb == prev_1_orb and prev_1_orb == cur_orb and (cur_orb != "X" or cur_orb != 0):
-                match_board[i][j] = cur_orb
-                match_board[i][j-1] = cur_orb
-                match_board[i][j-2] = cur_orb
-                board[i][j] = 0
-                board[i][j-1] = 0
-                board[i][j-2] = 0
+            if (prev_2_orb == prev_1_orb and
+                    prev_1_orb == cur_orb and
+                    (cur_orb != "X" or cur_orb != 0 or cur_orb != " ")):
+                board[i][j] = " "
+                board[i][j-1] = " "
+                board[i][j-2] = " "
             prev_2_orb = prev_1_orb
             prev_1_orb = cur_orb
 
@@ -83,35 +81,38 @@ def find_matches(board):
         prev_1_orb = "X"
         for i in range(0, ROWS):
             cur_orb = board[i][j]
-            if prev_2_orb == prev_1_orb and prev_1_orb == cur_orb and (cur_orb != "X" or cur_orb != 0):
-                match_board[i][j] = cur_orb
-                match_board[i-1][j] = cur_orb
-                match_board[i-2][j] = cur_orb
-                board[i][j] = 0
-                board[i-1][j] = 0
-                board[i-2][j] = 0
+            if (prev_2_orb == prev_1_orb and
+                    prev_1_orb == cur_orb and
+                    (cur_orb != "X" or cur_orb != 0 or cur_orb != " ")):
+                board[i][j] = " "
+                board[i-1][j] = " "
+                board[i-2][j] = " "
             prev_2_orb = prev_1_orb
             prev_1_orb = cur_orb
 
     #count number of matched orbs in every column
     matched_orbs = 0
-    for x in range(0, COLS):
-        for y in range(0, ROWS):
-            if board[y][x] == 0:
+    for x_coord in range(0, COLS):
+        for y_coord in range(0, ROWS):
+            if board[y_coord][x_coord] == " ":
                 matched_orbs += 1
     print(matched_orbs, "orbs matched")
-    print_board(board)
     if matched_orbs > 0:
-        find_matches(drop_orbs(board))
+        print_board(drop_orbs(board))
     else:
-        return match_board
+        return board
 
 
 def drop_orbs(board):
     """Takes a board with existing matches and drops
     the board accordingly.
     """
-
+    for row in range(ROWS-1, 0, -1):
+        for col in range(0, COLS):
+            if board[row][col] == " ":
+                ##TODO: GET THIS WORKING PLS
+                board[row][col] = board[row-1][col]
+    return board
 
 
 print_board(BOARD)

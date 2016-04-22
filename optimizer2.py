@@ -107,11 +107,18 @@ def drop_orbs(board):
     """Takes a board with existing matches and drops
     the board accordingly.
     """
-    for row in range(ROWS-1, 0, -1):
-        for col in range(0, COLS):
+    for row in range(ROWS-1, -1, -1):
+        col = 0
+        #TODO: NEVER ENDING LOOP FOR VERTICAL MATCHES. GETS STUCK ON " " CHARS
+        while col < COLS:
             if board[row][col] == " ":
-                ##TODO: GET THIS WORKING PLS
-                board[row][col] = board[row-1][col]
+                cur_row = row
+                for dropper in range(row, 0, -1):
+                    print(dropper)
+                    board[dropper][col] = board[dropper-1][col]
+                board[0][col] = " "
+            else:
+                col += 1
     return board
 
 

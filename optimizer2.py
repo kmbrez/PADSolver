@@ -58,7 +58,8 @@ def max_combos(board):
 
 def find_matches(board):
     """Using an existing board, this finds all orbs that currently count as a match.
-    Returns a board that only shows matched orbs.
+    Recursive function that will keep finding matches until it returns a board with
+    no matches remaining.
     """
     matched_orbs = 0
     #find horizontal matches first
@@ -95,11 +96,12 @@ def find_matches(board):
 
     # recursion here to re-check the board for more matches after matched orbs are dropped
     if matched_orbs > 0:
-        print("Dropping Orbs.")
+        print("Match found. Dropping Orbs.")
         new_board = drop_orbs(board)
         print_board(new_board)
         find_matches(new_board)
     else:
+        print("Final board")
         return board
 
 def column_drop(board, match_row, match_col):
@@ -120,8 +122,8 @@ def column_drop(board, match_row, match_col):
 
 
 def drop_orbs(board):
-    """Takes a board with existing matches and drops
-    the board accordingly.
+    """Takes a board with existing matches and finds
+    coordinates for where to drop the board.
     """
     for row in range(ROWS-1, 0, -1):
         for col in range(0, COLS):

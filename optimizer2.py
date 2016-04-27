@@ -96,12 +96,11 @@ def find_matches(board):
 
     # recursion here to re-check the board for more matches after matched orbs are dropped
     if matched_orbs > 0:
-        print("Match found. Dropping Orbs.")
+        print("Match found. Dropping Orbs.\n")
         new_board = drop_orbs(board)
         print_board(new_board)
         find_matches(new_board)
     else:
-        print("Final board")
         return board
 
 def column_drop(board, match_row, match_col):
@@ -131,8 +130,8 @@ def drop_orbs(board):
                 board = column_drop(board, row, col)
     return board
 
-
+print("ORIGINAL BOARD:\n")
 print_board(BOARD)
-print(max_combos(BOARD))
-print(sum(max_combos(BOARD)), "combos possible")
+#print(max_combos(BOARD))
+#print(sum(max_combos(BOARD)), "combos possible")
 find_matches(BOARD)

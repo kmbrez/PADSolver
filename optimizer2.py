@@ -60,6 +60,7 @@ def find_matches(board):
     """Using an existing board, this finds all orbs that currently count as a match.
     Returns a board that only shows matched orbs.
     """
+    matched_orbs = 0
     #find horizontal matches first
     for i in range(0, ROWS):
         prev_2_orb = "X"
@@ -68,14 +69,15 @@ def find_matches(board):
             cur_orb = board[i][j]
             if (prev_2_orb == prev_1_orb and
                     prev_1_orb == cur_orb and
-                    (cur_orb != "X" or cur_orb != 0 or cur_orb != " ")):
+                    (cur_orb != "X" and cur_orb != " " and cur_orb != 0)):
                 board[i][j] = " "
                 board[i][j-1] = " "
                 board[i][j-2] = " "
+                matched_orbs += 1
             prev_2_orb = prev_1_orb
             prev_1_orb = cur_orb
 
-	#find vertical matches
+	# find vertical matches
     for j in range(0, COLS):
         prev_2_orb = "X"
         prev_1_orb = "X"
@@ -83,42 +85,48 @@ def find_matches(board):
             cur_orb = board[i][j]
             if (prev_2_orb == prev_1_orb and
                     prev_1_orb == cur_orb and
-                    (cur_orb != "X" or cur_orb != 0 or cur_orb != " ")):
+                    (cur_orb != "X" and cur_orb != " " and cur_orb != 0)):
                 board[i][j] = " "
                 board[i-1][j] = " "
                 board[i-2][j] = " "
+                matched_orbs += 1
             prev_2_orb = prev_1_orb
             prev_1_orb = cur_orb
 
-    #count number of matched orbs in every column
-    matched_orbs = 0
-    for x_coord in range(0, COLS):
-        for y_coord in range(0, ROWS):
-            if board[y_coord][x_coord] == " ":
-                matched_orbs += 1
-    print(matched_orbs, "orbs matched")
+    # recursion here to re-check the board for more matches after matched orbs are dropped
     if matched_orbs > 0:
-        print_board(drop_orbs(board))
+        print("Dropping Orbs.")
+        new_board = drop_orbs(board)
+        print_board(new_board)
+        find_matches(new_board)
     else:
         return board
+
+def column_drop(board, match_row, match_col):
+    """Takes a board with a row/col coordinate and drops
+    the column accordingly.
+    """
+    next_orb = -1
+    for row in range(match_row, 0, -1):
+        if board[row-1][match_col] != " ":
+            next_orb = row - 1
+            break
+    if next_orb >= 0:
+        board[match_row][match_col] = board[next_orb][match_col]
+        for row in range(next_orb, 0, -1):
+            board[row][match_col] = board[row-1][match_col]
+        board[0][match_col] = " "
+    return board
 
 
 def drop_orbs(board):
     """Takes a board with existing matches and drops
     the board accordingly.
     """
-    for row in range(ROWS-1, -1, -1):
-        col = 0
-        #TODO: NEVER ENDING LOOP FOR VERTICAL MATCHES. GETS STUCK ON " " CHARS
-        while col < COLS:
+    for row in range(ROWS-1, 0, -1):
+        for col in range(0, COLS):
             if board[row][col] == " ":
-                cur_row = row
-                for dropper in range(row, 0, -1):
-                    print(dropper)
-                    board[dropper][col] = board[dropper-1][col]
-                board[0][col] = " "
-            else:
-                col += 1
+                board = column_drop(board, row, col)
     return board
 
 

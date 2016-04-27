@@ -25,14 +25,7 @@ def print_board(board):
         for orb in row:
             print(orb, end="")
         print("")
-
-
-#def make_rc(row, col):
-#	return {"row": row, "col": col}
-
-
-#def make_match(typing, count, isRow):
-#	return {"type": typing, "count": count, "isRow": isRow}
+    print("")
 
 
 def max_combos(board):
